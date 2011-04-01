@@ -16,30 +16,19 @@ package org.exoplatform.portlet.example;
  * limitations under the License.
  */
 
-import org.exoplatform.webui.application.WebuiApplication;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
-import org.exoplatform.webui.core.UIPortletApplication;
-import org.exoplatform.webui.core.lifecycle.UIApplicationLifecycle;
+
+import org.exoplatform.webui.core.lifecycle.Lifecycle;
+import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
+import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormStringInput;
 
-@ComponentConfig(
-					lifecycle = UIApplicationLifecycle.class	
-				)
-public class BookManagerPortlet extends UIPortletApplication {
+@ComponentConfig(lifecycle = UIFormLifecycle.class, template = "system:/groovy/webui/form/UIForm.gtmpl")
+public class UIBookSearchForm extends UIForm {
 
-	public BookManagerPortlet() throws Exception {
-		super();
-		PortletRequestContext portletRequestContext = WebuiRequestContext.getCurrentInstance();
-		javax.portlet.PortletPreferences preferences = portletRequestContext.getRequest().getPreferences();
-		// String text = preferences.getValue(UIBookSearchForm.TEXT_PREFERENCE, null);
-		String text = "please input search value";
+	public UIBookSearchForm() {
 
-		addChild(new UIFormStringInput("Search", text));
-	}
-
-	public void processRender(WebuiApplication app, WebuiRequestContext context) throws Exception {		
-		super.processRender(app, context);
 	}
 }

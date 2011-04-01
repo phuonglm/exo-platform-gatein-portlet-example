@@ -26,7 +26,7 @@
 	</profiles>
 	<properties>
 		<org.exoplatform.kernel.version>2.3.0-Beta03</org.exoplatform.kernel.version>
-
+		<org.exoplatform.portal.version>3.2.0-PLF-SNAPSHOT</org.exoplatform.portal.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -57,6 +57,19 @@
 			<version>0.0.1-SNAPSHOT</version>
 			<type>jar</type>
 			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.exoplatform.portal</groupId>
+			<artifactId>exo.portal.webui.framework</artifactId>
+			<scope>provided</scope>
+			<version>${org.exoplatform.portal.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.exoplatform.portal</groupId>
+			<artifactId>exo.portal.webui.portal</artifactId>
+			<scope>provided</scope>
+			<version>${org.exoplatform.portal.version}</version>
 		</dependency>
 	</dependencies>
 </project>
