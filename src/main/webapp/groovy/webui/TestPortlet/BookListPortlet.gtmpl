@@ -1,8 +1,12 @@
 <div class="$uicomponent.id">
 	<div class="Text">
-		<% bookList = uicomponent.getAllBook().size() %>
-		<%= bookList.each {
-			book -> println "${a}"
-		<% } %>	
+		<% bookList = uicomponent.getAllBook() %>
+		<ul>
+		<% bookList.each { %>
+			<li>
+			<%=it.getTitle()%>
+			</li>
+		<%}%>
+		<ul>	
 	</div>
 </div>
