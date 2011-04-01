@@ -16,6 +16,12 @@ package org.exoplatform.portlet.example;
  * limitations under the License.
  */
 
+import java.util.Calendar;
+import java.util.List;
+
+import org.exoplatform.container.PortalContainer;
+import org.exoplatform.jcr.example.pojo.Book;
+import org.exoplatform.jcr.example.service.BookManager;
 import org.exoplatform.webui.application.WebuiApplication;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
@@ -25,21 +31,35 @@ import org.exoplatform.webui.core.lifecycle.UIApplicationLifecycle;
 import org.exoplatform.webui.form.UIFormStringInput;
 
 @ComponentConfig(
-					lifecycle = UIApplicationLifecycle.class	
+					lifecycle = UIApplicationLifecycle.class,
+					template = "app:/groovy/webui/TestPortlet/BookListPortlet.gtmpl"
 				)
 public class BookManagerPortlet extends UIPortletApplication {
 
 	public BookManagerPortlet() throws Exception {
 		super();
-		PortletRequestContext portletRequestContext = WebuiRequestContext.getCurrentInstance();
-		javax.portlet.PortletPreferences preferences = portletRequestContext.getRequest().getPreferences();
+//		PortletRequestContext portletRequestContext = WebuiRequestContext.getCurrentInstance();
+//		javax.portlet.PortletPreferences preferences = portletRequestContext.getRequest().getPreferences();
 		// String text = preferences.getValue(UIBookSearchForm.TEXT_PREFERENCE, null);
-		String text = "please input search value";
-
-		addChild(new UIFormStringInput("Search", text));
+//		String text = "please input search value";
+//
+//		addChild(new UIFormStringInput("Search", text));
 	}
 
 	public void processRender(WebuiApplication app, WebuiRequestContext context) throws Exception {		
 		super.processRender(app, context);
+	}
+	
+	public List<Book> getAllBook(){
+		PortalContainer portalContainer = PortalContainer.getInstance();
+		BookManager bookManager = (BookManager) portalContainer.getComponentInstanceOfType(BookManager.class);
+		
+		Book book = new Book();
+		book.setTitle("Hello World");
+		book.setPrice(10);
+		book.setPublishDay(Calendar.getInstance());
+		bookManager.save(book);
+		
+		return bookManager.search(new Book());
 	}
 }
