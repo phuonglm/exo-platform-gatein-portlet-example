@@ -16,68 +16,30 @@ package org.exoplatform.portlet.example;
  * limitations under the License.
  */
 
-import java.io.IOException;
+import org.exoplatform.webui.application.WebuiApplication;
+import org.exoplatform.webui.application.WebuiRequestContext;
+import org.exoplatform.webui.application.portlet.PortletRequestContext;
+import org.exoplatform.webui.config.annotation.ComponentConfig;
+import org.exoplatform.webui.core.UIPortletApplication;
+import org.exoplatform.webui.core.lifecycle.UIApplicationLifecycle;
+import org.exoplatform.webui.form.UIFormStringInput;
 
-import javax.portlet.PortalContext;
-import javax.portlet.PortletConfig;
-import javax.portlet.GenericPortlet;
-import javax.portlet.PortletException;
-import javax.portlet.PortletRequestDispatcher;
-import javax.portlet.RenderRequest;
-import javax.portlet.RenderResponse;
-import javax.portlet.WindowState;
+@ComponentConfig(
+					lifecycle = UIApplicationLifecycle.class	
+				)
+public class BookManagerPortlet extends UIPortletApplication {
 
-import org.exoplatform.container.PortalContainer;
-import org.exoplatform.jcr.example.service.BookManager;
+	public BookManagerPortlet() throws Exception {
+		super();
+		PortletRequestContext portletRequestContext = WebuiRequestContext.getCurrentInstance();
+		javax.portlet.PortletPreferences preferences = portletRequestContext.getRequest().getPreferences();
+		// String text = preferences.getValue(UIBookSearchForm.TEXT_PREFERENCE, null);
+		String text = "please input search value";
 
-public class BookManagerPortlet extends GenericPortlet {
+		addChild(new UIFormStringInput("Search", text));
+	}
 
-    private static final String NORMAL_VIEW = "/normal.jsp";
-    private static final String MAXIMIZED_VIEW = "/maximized.jsp";
-    private static final String HELP_VIEW = "/help.jsp";
-
-    private PortletRequestDispatcher normalView;
-    private PortletRequestDispatcher maximizedView;
-    private PortletRequestDispatcher helpView;
-
-    public void doView( RenderRequest request, RenderResponse response )
-        throws PortletException, IOException {
-
-        if( WindowState.MINIMIZED.equals( request.getWindowState() ) ) {
-            return;
-        }
-
-        if ( WindowState.NORMAL.equals( request.getWindowState() ) ) {
-            PortalContainer portalContainer = PortalContainer.getInstance();
-            request.setAttribute("name", ((BookManager)portalContainer.getComponentInstanceOfType(BookManager.class)).sayName());
-            
-            normalView.include( request, response );
-        } else {
-            maximizedView.include( request, response );
-        }
-        
-
-    }
-
-    protected void doHelp( RenderRequest request, RenderResponse response )
-        throws PortletException, IOException {
-
-        helpView.include( request, response );
-
-    }
-
-    public void init( PortletConfig config ) throws PortletException {
-        super.init( config );
-        normalView = config.getPortletContext().getRequestDispatcher( NORMAL_VIEW );
-        maximizedView = config.getPortletContext().getRequestDispatcher( MAXIMIZED_VIEW );
-        helpView = config.getPortletContext().getRequestDispatcher( HELP_VIEW );
-    }
-
-    public void destroy() {
-        normalView = null;
-        maximizedView = null;
-        helpView = null;
-        super.destroy();
-    }
-
+	public void processRender(WebuiApplication app, WebuiRequestContext context) throws Exception {		
+		super.processRender(app, context);
+	}
 }
