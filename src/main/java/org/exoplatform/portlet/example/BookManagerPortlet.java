@@ -19,6 +19,11 @@ package org.exoplatform.portlet.example;
 import java.util.Calendar;
 import java.util.List;
 
+import javax.portlet.PortletMode;
+
+import org.exoplatform.webui.event.Event;
+import org.exoplatform.webui.event.EventListener;
+import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.jcr.example.pojo.Book;
 import org.exoplatform.jcr.example.service.BookManager;
@@ -28,13 +33,33 @@ import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.core.UIPortletApplication;
 import org.exoplatform.webui.core.lifecycle.UIApplicationLifecycle;
-import org.exoplatform.webui.form.UIFormStringInput;
 
 @ComponentConfig(
 					lifecycle = UIApplicationLifecycle.class,
-					template = "app:/groovy/webui/TestPortlet/BookListPortlet.gtmpl"
+					template = "app:/groovy/webui/TestPortlet/BookListPortlet.gtmpl",
+					events = {
+						@EventConfig(listeners = BookManagerPortlet.AddBookActionListener.class),
+						@EventConfig(listeners = BookManagerPortlet.SearchBookActionListener.class)
+					}					
 				)
 public class BookManagerPortlet extends UIPortletApplication {
+
+	public static class SearchBookActionListener extends EventListener<BookManagerPortlet> {
+		public void execute(Event<BookManagerPortlet> event) throws Exception {
+			BookManagerPortlet basicConfig = event.getSource();
+		    PortletRequestContext context = (PortletRequestContext) event.getRequestContext();
+			context.setApplicationMode(PortletMode.VIEW);
+		}
+
+	}
+
+	public static class AddBookActionListener extends EventListener<BookManagerPortlet> {
+		public void execute(Event<BookManagerPortlet> event) throws Exception {
+			BookManagerPortlet basicConfig = event.getSource();
+		    PortletRequestContext context = (PortletRequestContext) event.getRequestContext();
+			context.setApplicationMode(PortletMode.VIEW);	  
+		}
+	}
 
 	public BookManagerPortlet() throws Exception {
 		super();
@@ -46,19 +71,15 @@ public class BookManagerPortlet extends UIPortletApplication {
 //		addChild(new UIFormStringInput("Search", text));
 	}
 
-	public void processRender(WebuiApplication app, WebuiRequestContext context) throws Exception {		
+	public void processRender(WebuiApplication app, WebuiRequestContext context) throws Exception {
+		getChildren().clear();
+		if (this.getChild(UISearchBookForm.class) == null) this.addChild(UISearchBookForm.class, null, null);
 		super.processRender(app, context);
 	}
 	
 	public List<Book> getAllBook(){
 		PortalContainer portalContainer = PortalContainer.getInstance();
 		BookManager bookManager = (BookManager) portalContainer.getComponentInstanceOfType(BookManager.class);
-		
-		Book book = new Book();
-		book.setTitle("Hello World");
-		book.setPrice(10);
-		book.setPublishDay(Calendar.getInstance());
-		bookManager.save(book);
 		
 		return bookManager.search(new Book());
 	}

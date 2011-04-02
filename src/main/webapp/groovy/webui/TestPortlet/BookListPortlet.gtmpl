@@ -1,4 +1,7 @@
 <div class="$uicomponent.id">
+	<div><%=uicomponent.renderChild("UISearchBookForm") %></div>
+	<a href="<%=uicomponent.event("AddBook")%>">Search Book</a>
+	<a href="<%=uicomponent.event("SearchBook")%>">Add Book</a>
 	<div class="Text">
 		<% bookList = uicomponent.getAllBook() %>
 		<ul>
