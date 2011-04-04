@@ -1,0 +1,11 @@
+<div class="$uicomponent.id">
+
+		<% bookList = uicomponent.getAllBook() %>
+		<ul>
+		<% bookList.each { %>
+			<li>
+				<%=it.getTitle()%>
+			</li>
+		<%}%>
+		</ul>	
+</div>

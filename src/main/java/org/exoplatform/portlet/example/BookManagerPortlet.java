@@ -16,11 +16,11 @@ package org.exoplatform.portlet.example;
  * limitations under the License.
  */
 
-import java.util.Calendar;
 import java.util.List;
 
-import javax.portlet.PortletMode;
+import javassist.expr.Instanceof;
 
+import javax.portlet.PortletSession;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -43,44 +43,75 @@ import org.exoplatform.webui.core.lifecycle.UIApplicationLifecycle;
 					}					
 				)
 public class BookManagerPortlet extends UIPortletApplication {
-
+	private BookManagerPortletStatus bookManagerPortletStatus = null;
+	
 	public static class SearchBookActionListener extends EventListener<BookManagerPortlet> {
 		public void execute(Event<BookManagerPortlet> event) throws Exception {
-			BookManagerPortlet basicConfig = event.getSource();
 		    PortletRequestContext context = (PortletRequestContext) event.getRequestContext();
-			context.setApplicationMode(PortletMode.VIEW);
+		    
+		    PortletSession portletSession = context.getRequest().getPortletSession();
+		    BookManagerPortletStatus bookManagerPortletStatus = (BookManagerPortletStatus) portletSession.getAttribute("status");
+		    
+		    if(bookManagerPortletStatus != null &&  bookManagerPortletStatus instanceof BookManagerPortletStatus){
+		    	bookManagerPortletStatus.setStatus(BookManagerPortletStatus.SEARCH);
+		    } else {
+				bookManagerPortletStatus = new BookManagerPortletStatus();
+				portletSession.setAttribute("status", bookManagerPortletStatus);
+		    }
 		}
 
 	}
 
 	public static class AddBookActionListener extends EventListener<BookManagerPortlet> {
 		public void execute(Event<BookManagerPortlet> event) throws Exception {
-			BookManagerPortlet basicConfig = event.getSource();
 		    PortletRequestContext context = (PortletRequestContext) event.getRequestContext();
-			context.setApplicationMode(PortletMode.VIEW);	  
+		    PortletSession portletSession = context.getRequest().getPortletSession();
+		    BookManagerPortletStatus bookManagerPortletStatus = (BookManagerPortletStatus) portletSession.getAttribute("status");
+		    
+		    if(bookManagerPortletStatus != null &&  bookManagerPortletStatus instanceof BookManagerPortletStatus){
+		    	bookManagerPortletStatus.setStatus(BookManagerPortletStatus.ADD);
+		    } else {
+				bookManagerPortletStatus = new BookManagerPortletStatus();
+				portletSession.setAttribute("status", bookManagerPortletStatus);
+		    }
+		    
 		}
 	}
 
 	public BookManagerPortlet() throws Exception {
 		super();
-//		PortletRequestContext portletRequestContext = WebuiRequestContext.getCurrentInstance();
-//		javax.portlet.PortletPreferences preferences = portletRequestContext.getRequest().getPreferences();
-		// String text = preferences.getValue(UIBookSearchForm.TEXT_PREFERENCE, null);
-//		String text = "please input search value";
-//
-//		addChild(new UIFormStringInput("Search", text));
+		if (this.getChildById("UISearchForm") == null) this.addChild(UISearchBookForm.class, null, "UISearchForm");
+		if (this.getChildById("UIListBook") == null) this.addChild(UIListBook.class, null, "UIListBook");
 	}
 
 	public void processRender(WebuiApplication app, WebuiRequestContext context) throws Exception {
-		getChildren().clear();
-		if (this.getChild(UISearchBookForm.class) == null) this.addChild(UISearchBookForm.class, null, null);
+		PortletRequestContext  portletRequestContext = WebuiRequestContext.getCurrentInstance();
+		PortletSession portletSession =  portletRequestContext.getRequest().getPortletSession();
+		bookManagerPortletStatus = (BookManagerPortletStatus) portletSession.getAttribute("status");
+		
+		if(bookManagerPortletStatus != null &&  bookManagerPortletStatus instanceof BookManagerPortletStatus){
+
+		} else {
+			bookManagerPortletStatus = new BookManagerPortletStatus();
+			portletSession.setAttribute("status", bookManagerPortletStatus);
+		}
+		
+		String currentPage = bookManagerPortletStatus.getStatus();
+		if( BookManagerPortletStatus.SEARCH == bookManagerPortletStatus.getStatus()){
+			if (this.getChildById("UISearchForm") != null) this.getChildById("UISearchForm").setRendered(true);
+			if (this.getChildById("UIListBook") != null) this.getChildById("UIListBook").setRendered(true);
+		} else if (BookManagerPortletStatus.ADD == bookManagerPortletStatus.getStatus()){
+			
+		} else {
+			if (this.getChildById("UISearchForm") != null) this.getChildById("UISearchForm").setRendered(false);
+			if (this.getChildById("UIListBook") != null) this.getChildById("UIListBook").setRendered(true);
+		}
+		
 		super.processRender(app, context);
 	}
-	
-	public List<Book> getAllBook(){
-		PortalContainer portalContainer = PortalContainer.getInstance();
-		BookManager bookManager = (BookManager) portalContainer.getComponentInstanceOfType(BookManager.class);
-		
-		return bookManager.search(new Book());
+
+	public BookManagerPortletStatus getBookManagerPortletStatus() {
+		return bookManagerPortletStatus;
 	}
+
 }
