@@ -3,7 +3,7 @@ package org.exoplatform.portlet.example;
 public class BookManagerPortletStatus {
 	public static final String VIEWLIST = "viewlist";
 	public static final String SEARCH = "search";
-	public static final String ADD = "search";
+	public static final String ADD = "add";
 	
 	private String status = VIEWLIST;
 

@@ -82,6 +82,7 @@ public class BookManagerPortlet extends UIPortletApplication {
 		super();
 		if (this.getChildById("UISearchForm") == null) this.addChild(UISearchBookForm.class, null, "UISearchForm");
 		if (this.getChildById("UIListBook") == null) this.addChild(UIListBook.class, null, "UIListBook");
+		if (this.getChildById("UIAddBookForm") == null) this.addChild(UIAddBookForm.class, null, "UIAddBookForm");
 	}
 
 	public void processRender(WebuiApplication app, WebuiRequestContext context) throws Exception {
@@ -100,11 +101,16 @@ public class BookManagerPortlet extends UIPortletApplication {
 		if( BookManagerPortletStatus.SEARCH == bookManagerPortletStatus.getStatus()){
 			if (this.getChildById("UISearchForm") != null) this.getChildById("UISearchForm").setRendered(true);
 			if (this.getChildById("UIListBook") != null) this.getChildById("UIListBook").setRendered(true);
+			if (this.getChildById("UIAddBookForm") != null) this.getChildById("UIAddBookForm").setRendered(false);
 		} else if (BookManagerPortletStatus.ADD == bookManagerPortletStatus.getStatus()){
-			
+			if (this.getChildById("UISearchForm") != null) this.getChildById("UISearchForm").setRendered(false);
+			if (this.getChildById("UIListBook") != null) this.getChildById("UIListBook").setRendered(false);
+			if (this.getChildById("UIAddBookForm") != null) this.getChildById("UIAddBookForm").setRendered(true);			
 		} else {
 			if (this.getChildById("UISearchForm") != null) this.getChildById("UISearchForm").setRendered(false);
 			if (this.getChildById("UIListBook") != null) this.getChildById("UIListBook").setRendered(true);
+			if (this.getChildById("UIAddBookForm") != null) this.getChildById("UIAddBookForm").setRendered(false);
+
 		}
 		
 		super.processRender(app, context);

@@ -2,10 +2,16 @@
 	<% if( "search" == uicomponent.getBookManagerPortletStatus().getStatus() ){ %>
 	<div class="SearchForm"> <%uicomponent.renderChild("UISearchForm")%> </div>
 	<div class="ListResult"> <%uicomponent.renderChild("UIListBook")%> </div>
+	<% } else if( "add" == uicomponent.getBookManagerPortletStatus().getStatus() ) { %>
+	<div class="ListAll">
+		<div class="ListResult"> 
+			<%uicomponent.renderChild("UIAddBookForm")%>
+		</div>
+	</div>
 	<% } else { %>
 	<div class="ListAll">
-		<a href="<%=uicomponent.event("AddBook")%>">Search Book</a>
-		<a href="<%=uicomponent.event("SearchBook")%>">Add Book</a>
+		<a href="<%=uicomponent.event("SearchBook")%>">Search Book</a>
+		<a href="<%=uicomponent.event("AddBook")%>">Add Book</a>
 		<div class="ListResult"> 
 			<%uicomponent.renderChild("UIListBook")%>
 		</div>
