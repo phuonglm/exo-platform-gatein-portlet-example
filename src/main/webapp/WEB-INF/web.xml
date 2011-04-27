@@ -6,22 +6,14 @@
     <display-name>FortunePortlet</display-name>
 
     <description>Automated generated Application Wrapper</description>
-
+	<listener>
+		<listener-class>org.exoplatform.services.portletcontainer.impl.servlet.PortletApplicationListener</listener-class>
+	</listener>
     <servlet>
         <servlet-name>BookManagerPortlet</servlet-name>
         <display-name>BookManagerPortlet Portlet</display-name>
         <description>Generated Portlet Wrapper</description>
-        <servlet-class>org.exoplatform.portlet.example.BookManagerPortlet</servlet-class>
-
-        <init-param>
-            <param-name>portlet-class</param-name>
-            <param-value>org.exoplatform.portlet.example.BookManagerPortlet</param-value>
-        </init-param>
-
-        <init-param>
-            <param-name>portlet-guid</param-name>
-            <param-value>yourportlet.BookManagerPortlet</param-value>
-        </init-param>
+		<servlet-class>org.exoplatform.services.portletcontainer.impl.servlet.ServletWrapper</servlet-class>
     </servlet>
 
     <servlet-mapping>

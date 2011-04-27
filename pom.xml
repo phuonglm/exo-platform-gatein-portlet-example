@@ -7,23 +7,6 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<name>Maven Portlet Archetype</name>
 	<url>http://maven.apache.org</url>
-	<profiles>
-		<profile>
-			<id>jetspeed</id>
-			<build>
-				<plugins>
-					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-war-plugin</artifactId>
-						<version>2.0-beta-2</version>
-						<configuration>
-							<webXml>src/main/jetspeed/web.xml</webXml>
-						</configuration>
-					</plugin>
-				</plugins>
-			</build>
-		</profile>
-	</profiles>
 	<properties>
 		<org.exoplatform.kernel.version>2.3.0-Beta03</org.exoplatform.kernel.version>
 		<org.exoplatform.portal.version>3.2.0-PLF-SNAPSHOT</org.exoplatform.portal.version>
